@@ -20,7 +20,7 @@ const parseHTML = (data) => {
     podcastList.push({
       title,
       rank,
-      prodcution: prodCompany,
+      production: prodCompany,
       link: link,
       thumbnail,
     });
