@@ -1,0 +1,14 @@
+{
+  "name": "scraper",
+  "version": "1.0.0",
+  "description": "Example of creating a function that runs as a cron job using the serverless `schedule` event",
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^1.2.6",
+    "cheerio": "^1.0.0-rc.12"
+  },
+  "devDependencies": {
+    "serverless-offline": "^12.0.4"
+  }
+}
