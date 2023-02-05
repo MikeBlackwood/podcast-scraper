@@ -31,7 +31,7 @@ functions:
     handler: lambdas/scrape-data/handler.run
     events:
       # Invoke Lambda function every 23 hours
-      - schedule: rate(23 hours)
+      - schedule: rate(1 day)
   get-list:
     handler: lambdas/get-podcasts/handler.run
     events:

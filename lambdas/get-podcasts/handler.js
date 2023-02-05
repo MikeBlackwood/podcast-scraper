@@ -1,15 +1,8 @@
 "use strict";
-/*
-    1. Recieve date
-    2. Get file location from dynamo
-    3. fetch data
-    4. decode data
-    5. return as json
-*/
 
 var AWS = require("aws-sdk");
 
-async function getParameter(tableName, search) {
+function getParameter(tableName, search) {
   const params = {
     TableName: tableName,
     KeyConditionExpression: "PK = :hkey",
@@ -22,17 +15,38 @@ async function getParameter(tableName, search) {
 }
 
 module.exports.run = async (event, context) => {
-  const date = event.queryStringParameters.date;
-  console.log(date);
-  const data = await getParameter("podcast-list", date).then((data) => {
-    return data.Items[0].list;
+  const query = event.queryStringParameters;
+  if (!query) {
+    return {
+      statusCode: 404,
+      headers: {
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*",
+      },
+      body: JSON.stringify({ error: "Date parameter is required" }),
+    };
+  }
+  const date = query.date;
+  const resp = getParameter("podcast-list", date).then((response) => {
+    if (response.Items.length === 0) {
+      return {
+        statusCode: 200,
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+        },
+        body: JSON.stringify({ error: "No data for current parameter" }),
+      };
+    }
+
+    return {
+      statusCode: 200,
+      headers: {
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*",
+      },
+      body: JSON.stringify(response.Items[0].list),
+    };
   });
-  return {
-    statusCode: 200,
-    headers: {
-      "Content-Type": "application/json",
-      "Access-Control-Allow-Origin": "*",
-    },
-    body: JSON.stringify(data),
-  };
+  return resp;
 };
